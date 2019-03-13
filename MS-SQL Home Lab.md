@@ -131,7 +131,8 @@ If we receive SQL prompt we're good to go!
 ```
 systemctl enable docker
 systemctl disable docker
+```
 
-**Install Azure Data Studio**  
+**To Do: Install Azure Data Studio**  
 
 
