@@ -1,7 +1,7 @@
 # Project: MS-SQL Home Lab  
 * MS-SQL Home Lab (Debian)
   * Setup a place to learn MS-SQL
-  * Requires: Official MS-SQL Docker & Azure Data Studio  
+  * Requires: Docker, Official MS-SQL Docker Image & Azure Data Studio  
 
 Learning SQL can take time, having a Home Lab to run makes learning easier and provides more opportunity to take the time to learn.  
   
@@ -39,7 +39,7 @@ docker run hello-world
 
 **Note:**  To update the Docker .deb package, download and install Docker again  
   
-When installation is successful you will get output:  
+When the installation is successful you will get output:  
 
 ```
 Unable to find image 'hello-world:latest' locally
@@ -78,16 +78,47 @@ Install MS-SQL Docker image:
 docker pull mcr.microsoft.com/mssql/server:2017-latest
 ```  
 
-Run the docker image:  
+Build the docker image:  
 ```
 docker run --name sqldev -e 'ACCEPT_EULA=Y' -e 'MSSQL_SA_PASSWORD=Database007!' -e 'MSSQL_PID=Developer' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
 ```  
-Log in to the docker image:  
+Optional - Add user to docker group to run as user instead of root  
+
+```
+usermod -aG docker $USER
+```
+
+Then:
+
+```
+docker start sqldev
+```
+
+We should have a running docker instance of MS-SQL, we should be able to connect to it manually or with Azure Data Studio.  
+
+Verify running instance with
+
+```
+#docker ps
+
+a7cfaeeb0c53        mcr.microsoft.com/mssql/server:2017-latest   "/opt/mssql/bin/sqls…"   4 minutes ago       Up About a minute   0.0.0.0:1433->1433/tcp   sqldev
+
+```
+
+
+**Note:** The docker images have password requirements be sure to have a good password, for this test we're using "Database007!". You will need this to log into the SQL Server console, or connecting to it from Azure Data Studio.dock
+
+To verify the MS-SQL server is running and accessable log in to the docker image:  
 
 ```
 docker exec -it sqldev "bash"
 ```  
 
+Once inside the container we can run:  
+
+```
+/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'Database007!'
+```
 
 
 
