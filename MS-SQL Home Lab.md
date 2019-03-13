@@ -18,26 +18,26 @@ Browse to the pool then stable, eg. https://download.docker.com/linux/debian/dis
 ```  
 Download all the \*.deb files  
 
-Install the CLI  
+Install the CLI:  
 ```
 dkpg -i docker-ce-cli_18.09.3~3-0~debian-stretch_amd64.deb
 ```  
-Install containerd.io  
+Install containerd.io:  
 ```
 dpkg -i containerd.io_1.2.4-1_amd64.deb  
 ```
 
-Install the docker files  
+Install the docker files:  
 ```
 docker-ce_18.09.3~3-0~debian-stretch_amd64.deb  
 ```  
 
-Run and Test  
+Run and Test:  
 ```
 docker run hello-world  
 ```
 
-Note: To update the Docker .deb package, download and install Docker again  
+**Note:**  To update the Docker .deb package, download and install Docker again  
   
 When installation is successful you will get output:  
 
@@ -69,4 +69,25 @@ Share images, automate workflows, and more with a free Docker ID:
 For more examples and ideas, visit:
  https://docs.docker.com/get-started/
  ```
+
+**Docker is Installed**  
+
+Install MS-SQL Docker image:  
+
+```
+docker pull mcr.microsoft.com/mssql/server:2017-latest
+```  
+
+Run the docker image:  
+```
+docker run --name sqldev -e 'ACCEPT_EULA=Y' -e 'MSSQL_SA_PASSWORD=Database007!' -e 'MSSQL_PID=Developer' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
+```  
+Log in to the docker image:  
+
+```
+docker exec -it sqldev "bash"
+```  
+
+
+
 
