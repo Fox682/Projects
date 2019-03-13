@@ -104,9 +104,12 @@ Verify running instance with
 a7cfaeeb0c53        mcr.microsoft.com/mssql/server:2017-latest   "/opt/mssql/bin/sqls…"   4 minutes ago       Up About a minute   0.0.0.0:1433->1433/tcp   sqldev
 
 ```
+If this step fails check for errors with docker log followed by the first few (unique) characters of the container name. If running from a virtual machine, be sure it has 2GBs (2048MBs) allocated RAM.  
+```
+docker log a7cf
+```
 
-
-**Note:** The docker images have password requirements be sure to have a good password, for this test we're using "Database007!". You will need this to log into the SQL Server console, or connecting to it from Azure Data Studio.dock
+**Note:** The docker images have password requirements be sure to have a good password, for this test we're using "Database007!". You will need this to log into the SQL Server console, or connecting to it from Azure Data Studio.  
 
 To verify the MS-SQL server is running and accessable log in to the docker image:  
 
@@ -114,11 +117,10 @@ To verify the MS-SQL server is running and accessable log in to the docker image
 docker exec -it sqldev "bash"
 ```  
 
-Once inside the container we can run:  
+Once inside the container (the prompt will change to a root promt with name of containter eg. root@a7cfaeeb0c53:/#)  we can run:  
 
 ```
 /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'Database007!'
 ```
-
-
+If we receive SQL prompt we're good to go!
 
