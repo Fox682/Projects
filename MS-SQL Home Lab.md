@@ -10,7 +10,7 @@ Update the system:
 ```bash
 # apt update && apt upgrade
 ```  
-###Install Docker CE:  
+**Install Docker CE:**  
 
 Download the Docker .deb - https://download.docker.com/linux/debian/dists/  
 Browse to the pool then stable, eg. https://download.docker.com/linux/debian/dists/stretch/pool/stable/amd64/
@@ -74,7 +74,7 @@ For more examples and ideas, visit:
 
 Docker should now be installed and working properly. Next Step is to download the MS-SQL Docker container from Microsoft. We can use Docker for this.  
 
-Install MS-SQL Docker image:  
+**Install MS-SQL Docker image:**  
 
 ```
 docker pull mcr.microsoft.com/mssql/server:2017-latest
