@@ -142,9 +142,14 @@ Download the .deb installer:
 wget https://azuredatastudiobuilds.blob.core.windows.net/releases/1.4.5/azuredatastudio-linux-1.4.5.deb
 ```  
 
-Install Azure Data Studio:  
+Install Azure Data Studio and dependancies:  
 
 ```
+apt install libunwind8
 dkpg -i azuredatastudio-linux-1.4.5.deb
 ```
 
+To Do:  
+- Add info on Azure Setup
+- Testing works!
+- Add here
