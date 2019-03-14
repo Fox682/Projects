@@ -31,7 +31,7 @@ dpkg -i containerd.io_1.2.4-1_amd64.deb
 
 Install the docker files:  
 ```
-docker-ce_18.09.3~3-0~debian-stretch_amd64.deb  
+dpkg -i docker-ce_18.09.3~3-0~debian-stretch_amd64.deb  
 ```  
 
 Run and Test:  
