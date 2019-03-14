@@ -113,13 +113,13 @@ docker log a7cf
 
 **Note:** The docker images have password requirements be sure to have a good password, for this test we're using "Database007!". You will need this to log into the SQL Server console, or connecting to it from Azure Data Studio.  
 
-To verify the MS-SQL server is running and accessable log in to the docker image:  
+To verify the MS-SQL server is running and accessable, log in to the docker image:  
 
 ```
 docker exec -it sqldev "bash"
 ```  
 
-Once inside the container (the prompt will change to a root prompt with the name of containter eg. root@a7cfaeeb0c53:/#)  we can run:  
+Once inside the container (the prompt will change to a root prompt with the name of containter eg. *root@a7cfaeeb0c53:/#*)  we can run:  
 
 ```
 /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'Database007!'
@@ -136,13 +136,13 @@ systemctl disable docker
 
 ## **Install Azure Data Studio**  
 
-Download the .deb installer
+Download the .deb installer:
 
 ```
 wget https://azuredatastudiobuilds.blob.core.windows.net/releases/1.4.5/azuredatastudio-linux-1.4.5.deb
 ```  
 
-Install Azure Data Studio  
+Install Azure Data Studio:  
 
 ```
 dkpg -i azuredatastudio-linux-1.4.5.deb
