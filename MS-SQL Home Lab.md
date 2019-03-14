@@ -10,7 +10,8 @@ Update the system:
 ```bash
 # apt update && apt upgrade
 ```  
-Install Docker CE:  
+###Install Docker CE:  
+
 Download the Docker .deb - https://download.docker.com/linux/debian/dists/  
 Browse to the pool then stable, eg. https://download.docker.com/linux/debian/dists/stretch/pool/stable/amd64/
 ```bash
