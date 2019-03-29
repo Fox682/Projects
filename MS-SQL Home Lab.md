@@ -149,4 +149,6 @@ apt install libunwind8
 dkpg -i azuredatastudio-linux-1.4.5.deb
 ```
 
-The interface for ADS is straight forward. The 
+The interface for ADS is straight forward. 
+- Make sure the **Connection Type** is Microsoft SQL Server
+- **Server** needs both IP address and port using a *comma* for seperation, ie. 192.168.0.20,1433
