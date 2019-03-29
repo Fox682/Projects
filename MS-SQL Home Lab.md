@@ -22,7 +22,7 @@ Download all the \*.deb files
 
 Install the CLI:  
 ```
-dkpg -i docker-ce-cli_18.09.3~3-0~debian-stretch_amd64.deb
+dpkg -i docker-ce-cli_18.09.3~3-0~debian-stretch_amd64.deb
 ```  
 Install containerd.io:  
 ```
@@ -142,14 +142,11 @@ Download the .deb installer:
 wget https://azuredatastudiobuilds.blob.core.windows.net/releases/1.4.5/azuredatastudio-linux-1.4.5.deb
 ```  
 
-Install Azure Data Studio and dependancies:  
+Install Azure Data Studio (ADS) and (Debian) dependancies:  
 
 ```
 apt install libunwind8
 dkpg -i azuredatastudio-linux-1.4.5.deb
 ```
 
-To Do:  
-- Add info on Azure Setup
-- Testing works!
-- Add here
+The interface for ADS is straight forward. The 
