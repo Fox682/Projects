@@ -4,7 +4,7 @@
 * [MS-SQL Home Lab](https://github.com/Fox682/Projects/blob/master/MS-SQL%20Home%20Lab.md)
   * Setup a place to learn MS-SQL
   * Requires: Docker, Official MS-SQL Docker Image & Azure Data Studio  
-* Debian Tap to Click
+* [Debian Tap to Click](https://github.com/Fox682/Projects/blob/master/DebianTTC.md)
   * Enable Tap to Click for Laptops
 * Setup zRAM for Low Memory Systems
   * Requirements: SystemD 
