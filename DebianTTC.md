@@ -2,7 +2,11 @@
 Tap to Click for Touchpad
 
 Enable Tap to Click for Debian with Libinput  
-- Find this file libinput.conf (XX-libinput.conf... etc)
+- Find this file libinput.conf (XX-libinput.conf... etc)  
+```
+find / | grep libinput.conf
+```
+
 - Add this section to the file:  
 
 ``` 
