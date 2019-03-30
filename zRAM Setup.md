@@ -8,12 +8,15 @@ Disable existing swap file (pi)
 
 Create Systemd Unit file to run a zram script:
 
-=========
-Unit File
-=========
-Create File
-- cd /etc/systemd/system/
-- touch zram.service
+## Unit File  
+
+Create File  
+```
+cd /etc/systemd/system/
+touch zram.service
+```  
+
+zram.service file:  
 
 ```
 [Unit]
@@ -28,9 +31,8 @@ RemainAfterExit=yes
 [Install]
 WantedBy=multi-user.target
 ```  
-======
-Script
-======
+
+## Script  
 
 Put file
 - cd /usr/bin
