@@ -152,3 +152,7 @@ dkpg -i azuredatastudio-linux-1.4.5.deb
 The interface for ADS is straight forward. 
 - Make sure the **Connection Type** is Microsoft SQL Server
 - **Server** needs both IP address and port using a *comma* for seperation, ie. 192.168.0.20,1433
+- **Authentication type** is SQL Login
+- **Password** is the password you used above (Database007! in this example)  
+
+Everything else should be default and it will give you access to the Database.
