@@ -12,7 +12,7 @@ Should show a location similar to this:
 /usr/share/X11/xorg.conf.d/40-libinput.conf
 ```  
 
-- Add this section to the end of the file:  
+Add this section to the end of the file:  
 
 ``` 
 #Added for Tap to Click
