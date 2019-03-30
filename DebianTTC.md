@@ -24,4 +24,4 @@ Section "InputClass"
 EndSection
 ```  
 
-Tap to click should now be enabled for the touchpad. May need to logout/login or reboot to complete
+Tap to click should now be enabled for the touchpad. May need to logout/login or reboot to complete.
