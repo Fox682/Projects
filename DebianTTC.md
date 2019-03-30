@@ -3,7 +3,7 @@ Tap to Click for Touchpad
 
 Enable Tap to Click for Debian with Libinput  
 - Find this file libinput.conf (XX-libinput.conf... etc)
-- Add this  
+- Add this section to the file:  
 
 ``` 
 #Added for Tap to Click
@@ -14,3 +14,5 @@ Section "InputClass"
         Option "Tapping" "on"
 EndSection
 ```  
+
+Tap to click should now be enabled for the touchpad.
