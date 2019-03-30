@@ -34,10 +34,14 @@ WantedBy=multi-user.target
 
 ## Script  
 
-Put file
-- cd /usr/bin
-- touch zram
-- make executable! > chmod a+x zram  
+Put the file in the right spot and give it executable permissions.  
+```
+cd /usr/bin
+touch zram
+chmod a+x zram  
+```  
+
+**zRam Script:**  
 
 ```
 #!/bin/sh
