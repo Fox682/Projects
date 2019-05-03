@@ -155,4 +155,10 @@ The interface for ADS is straight forward.
 - **Authentication type** is SQL Login
 - **Password** is the password you used above (Database007! in this example)  
 
-Everything else should be default and it will give you access to the Database.
+Everything else should be default and it will give you access to the Database.  
+
+## **Using Microsoft SQL Server Management Studio**  
+  
+The Docker image is fully compatible with MSSMS. To connect to the sever from Windows use the same IP address.
+- **Server Name:** Use the same IP address, the software will default to port 1433 if it is not specified.
+- **Authentication:** Use the same info as above.
