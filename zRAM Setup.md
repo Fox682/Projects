@@ -1,22 +1,27 @@
-- ZRAM Mod for Pi and other PCs
-- Compress Section of Ram
-- Use Compressed Ram as Swap
+## **ZRAM Setup**  
+ZRAM sets up a Swap file for use with low memory systems using Compressed RAM. This works well for low memory devies such as the Raspberry Pi or older computers.  
+
+**Raspberry Pi**
+For the RPi you will need to disable the current Swap File
 
 Disable existing swap file (pi)
 - nano /etc/dphys-swapfile
-- set CONF_SWAPSIZE=0
+```
+set CONF_SWAPSIZE=0
+```  
 
-Create Systemd Unit file to run a zram script:
+Create Systemd Unit file to run the ZRAM script:
 
 ## Unit File  
 
-Create File  
+Goto the SystemD folder and create the file.
+
 ```
 cd /etc/systemd/system/
 touch zram.service
 ```  
 
-zram.service file:  
+Contents of the zram.service file:  
 
 ```
 [Unit]
@@ -35,6 +40,7 @@ WantedBy=multi-user.target
 ## Script  
 
 Put the file in the right spot and give it executable permissions.  
+
 ```
 cd /usr/bin
 touch zram
@@ -94,15 +100,19 @@ esac
 
 ==========================================
 
-Enable Unit file
-- systemctl enable zram.service
+Enable Unit file  
+```
+systemctl enable zram.service
+```
+
 - Should come back saying symlink created
 
 Start Service
-- systemctl start zram.service
+```
+systemctl start zram.service
+```
 
-Verify zram created
-- htop
+Verify zram created, check top or htop
 - /dev will have zram devices (4 of them)
 
-- Works!
+You should now be able to use ZRAM on your system.  
