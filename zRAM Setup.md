@@ -1,12 +1,12 @@
 ## **ZRAM Setup**  
 ZRAM sets up a Swap file for use with low memory systems using Compressed RAM. This works well for low memory devies such as the Raspberry Pi or older computers.  
 
-**Raspberry Pi**
+**Raspberry Pi**  
 For the RPi you will need to disable the current Swap File
 
-Disable existing swap file (pi)
-- nano /etc/dphys-swapfile
+Disable existing swap file (RPi). Open the dphys-swapfile and set the CONF_SWAPSIZE to 0.  
 ```
+nano /etc/dphys-swapfile
 set CONF_SWAPSIZE=0
 ```  
 
