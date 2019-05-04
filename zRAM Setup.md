@@ -10,11 +10,22 @@ nano /etc/dphys-swapfile
 set CONF_SWAPSIZE=0
 ```  
 
-Create Systemd Unit file to run the ZRAM script:
+**Computers**  
+Turn the Swap off
+```
+swapoff
+```  
+You will need to open fstab to comment out (or remove) any entries related to the swap file.  
+```
+# swap was on /dev/sda5 during installation
+#UUID=xxxxc4f8-5e81-4157-9c4a-25561d5xxxxx none            swap    sw              0       0
+/dev/sr0        /media/cdrom0   udf,iso9660 user,noauto     0       0
+```  
+Notice the hash character is before UUID. Save the file, a reboot may be needed.  
+
 
 ## Unit File  
-
-Goto the SystemD folder and create the file.
+Create Systemd Unit file to run the ZRAM script. Goto the SystemD folder and create the file.  
 
 ```
 cd /etc/systemd/system/
