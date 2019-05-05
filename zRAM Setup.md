@@ -2,7 +2,7 @@
 ZRAM sets up a Swap file for use with low memory systems using Compressed RAM. This works well for low memory devies such as the Raspberry Pi or older computers.  
 
 **Raspberry Pi**  
-For the RPi you will need to disable the current Swap File
+For the RPi you will need to disable the current Swap File, this is currently using 100MBs on the SD Card. We will disable this to reduce wear on the card.
 
 Disable existing swap file (RPi). Open the dphys-swapfile and set the CONF_SWAPSIZE to 0.  
 ```
@@ -11,7 +11,7 @@ set CONF_SWAPSIZE=0
 ```  
 
 **Computers**  
-Turn the Swap off
+Turn the Swap off (optional). 
 ```
 swapoff
 ```  
