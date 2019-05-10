@@ -7,4 +7,7 @@
 * [Debian Tap to Click](https://github.com/Fox682/Projects/blob/master/DebianTTC.md)
   * Enable Tap to Click for Laptops
 * [Setup zRAM for Low Memory Systems](https://github.com/Fox682/Projects/blob/master/zRAM%20Setup.md)
-  * Requirements: SystemD 
+  * Requirements: SystemD  
+
+**Future:**  
+- YTDL (latest and updatable) with MPV
