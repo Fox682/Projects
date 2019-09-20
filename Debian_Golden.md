@@ -41,7 +41,8 @@ apt install tmux htop ufw fdisk cloud-guest-utils
 
 alias su='su -'
 
-Root Section
+**Root Section**
+
 - Enable ls colors
 - Check Bashrc  
 ```
@@ -56,47 +57,61 @@ ufw default deny incoming
 ufw default allow outgoing
 ```
 
-- Then Setup rules  
+Setup rules (ssh)
 ```
 ufw allow ssh
 ```  
 
-- Enable
-```
-ufw enable
-```  
-
-- Logging! (For use with Fail2Ban)  
-```
-ufw logging on
-``` 
-
-- Logs are stored in:  
+Enable Firewall
 ```
 /var/logs/ufw
 ```  
 
-- Reset and clear all rules  (if all goes weird)  
+Reset and clear all rules  (if all goes weird)  
+```
 ufw reset
+```
 
 Other Examples  
-- Allow only from port/protocol  
-- ufw allow 8080/udp
+```
+Allow only from port/protocol  
+ufw allow 8080/udp
+Allow SSH
+```  
 
-- Allow SSH
-- Mosh? (No agent forwarding)
-
-
--------
-
-- Setup Swapfile
--- See Swapfile Note
--- Adjust Swappiness to 10  
-
+Mosh?
+- Good for Mobile
+- Cannot do agent forwarding
 
 -------
 
-**Bash Colorful Prompts** 
+### Setup Swapfile  
+
+Create a Swapfile for use as swap instead of a partition. VPS's usually don't use partitions.
+```
+#AS ROOT
+#Create the Swapfile itself
+dd if=/dev/zero of=/swapfile bs=1024 count=1048576
+
+#Make readonly for root user
+chmod 600 /swapfile
+
+#Make the file a swapfile
+mkswap /swapfile
+
+#Turn on Swap for the system
+swapon /swapfile
+
+#Goto /etc/fstab, append
+/swapfile swap swap defaults 0 0
+
+#Verify Swapfile is setup
+swapon --show
+```
+
+-------
+
+**Colorful Prompts Prompts** 
 
 - User
 ```
@@ -116,10 +131,6 @@ PS1='\[$(tput bold)\]\[\033[38;5;1m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[0
 https://stackoverflow.com/questions/338285/prevent-duplicates-from-being-saved-in-bash-history#answer-7449399
 
 
-**Automation:**
+**Automation To Do:**
 
-- Do we need a user specifically for Ansible?
--- May be able to login with regular user and Key
 
-- Need playbook for Setup
--- VM would only need SSHd & Python3 (default) installed
