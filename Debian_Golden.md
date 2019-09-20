@@ -5,18 +5,18 @@ Below includes the software and configuration info for create a base useful Debi
     
 Setup for Buster Debian 10
 
-User:user  
-Root:root
-
 - NetInstall ISO
 - Utilities and SSH only
 - Flat filesystem (no swap on setup)
+- User Accounts  
+User:user  
+Root:root  
 
 Update Sources.list file
-- nano /etc/apt/sources.list
-
+- nano /etc/apt/sources.list  
 - Uncomment deb-src
 - Add contrib and non-free to ends
+- May need to replace file instead during automation
 
 ```
 deb http://deb.debian.org/debian/ buster main contrib non-free
@@ -30,12 +30,12 @@ deb http://deb.debian.org/debian/ buster-updates main contrib non-free
 #deb-src http://deb.debian.org/debian/ buster-updates main
 ```
 
-#### == Install & Configure Software ==
+### == Install & Configure Software ==
 ```
 apt update && apt upgrade
 apt install tmux htop ufw fdisk cloud-guest-utils
 ```  
-### Configure System  
+#### Configure System  
 
 **User Section:**
 
@@ -64,30 +64,37 @@ ufw allow ssh
 
 Enable Firewall
 ```
-/var/logs/ufw
+ufw enable
+
+#Turn off with
+ufw disable
+```
+
+Enable Logging
+```
+ufw logging on
+#Logs are in /var/logs/ufw
 ```  
 
 Reset and clear all rules  (if all goes weird)  
 ```
+#Turn firewall off first!
 ufw reset
 ```
 
-Other Examples  
+Other Examples (Allow only from port/protocol)
 ```
-Allow only from port/protocol  
 ufw allow 8080/udp
 Allow SSH
 ```  
 
 Mosh?
 - Good for Mobile
-- Cannot do agent forwarding
-
--------
+- Cannot do agent forwarding  
 
 ### Setup Swapfile  
 
-Create a Swapfile for use as swap instead of a partition. VPS's usually don't use partitions.
+Create a Swapfile for use as swap instead of a partition. VPS's usually don't use partitions.  
 ```
 #AS ROOT
 #Create the Swapfile itself
@@ -102,7 +109,7 @@ mkswap /swapfile
 #Turn on Swap for the system
 swapon /swapfile
 
-#Goto /etc/fstab, append
+#Goto /etc/fstab, append to end
 /swapfile swap swap defaults 0 0
 
 #Verify Swapfile is setup
@@ -111,7 +118,8 @@ swapon --show
 
 -------
 
-**Colorful Prompts Prompts** 
+**Colorful Prompts Prompts**  
+Append to the end of the .bashrc files of each user (root and user)
 
 - User
 ```
@@ -121,10 +129,9 @@ PS1='${debian_chroot:+($debian_chroot)}\[\033[01;90m\]\u@\h\[\033[00m\]:\[\033[0
 ```
 PS1='\[$(tput bold)\]\[\033[38;5;1m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 ```
-**== Automation & TO DO's ==**
+**== Automation & TO DO's ==**  
 
 **TO DO:**
-
 - Adjust Bash History to keep all commands Longer?
 -- Pretty involved, more thought needed for this.
 -- Possible Solution:
