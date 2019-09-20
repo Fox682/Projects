@@ -132,5 +132,6 @@ https://stackoverflow.com/questions/338285/prevent-duplicates-from-being-saved-i
 
 
 **Automation To Do:**
-
+- Use Ansible
+- Create Playbook for this
 
