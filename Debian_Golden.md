@@ -30,7 +30,7 @@ deb http://deb.debian.org/debian/ buster-updates main contrib non-free
 #deb-src http://deb.debian.org/debian/ buster-updates main
 ```
 
-### == Install & Configure Software ==
+### Install & Configure Software  
 ```
 apt update && apt upgrade
 apt install tmux htop ufw fdisk cloud-guest-utils
