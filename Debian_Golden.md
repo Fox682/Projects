@@ -114,11 +114,9 @@ swapon /swapfile
 
 #Verify Swapfile is setup
 swapon --show
-```
+```  
 
--------
-
-**Colorful Prompts Prompts**  
+**Colorful Prompts**  
 Append to the end of the .bashrc files of each user (root and user)
 
 - User
@@ -129,7 +127,7 @@ PS1='${debian_chroot:+($debian_chroot)}\[\033[01;90m\]\u@\h\[\033[00m\]:\[\033[0
 ```
 PS1='\[$(tput bold)\]\[\033[38;5;1m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 ```
-**== Automation & TO DO's ==**  
+**Automation & TO DO's**  
 
 **TO DO:**
 - Adjust Bash History to keep all commands Longer?
