@@ -51,7 +51,7 @@ Install the OpenVPN Client:
 
 `apt install openvpn`
 
-Install the Wireguard Client and tools: (if needed)
+Install the Wireguard Client and tools: (if going down the VPS rabbit hole)
 
 `apt install wireguard wireguard-tools`
 
@@ -67,7 +67,7 @@ From there you can tell the openvpn client to use that file.
 
 If you're using wireguard the equivalent command is: (this assumes that your config is in `/etc/wireguard/wg0.conf`)
 
-`wg-quick up wg0`
+`wg-quick up wg0` (without the .conf that's your interface name)
 
 **Set your PiHole to have a static IP address:**
 
@@ -105,6 +105,10 @@ ens3             UP             192.168.0.200/24 fe80::5054:ff:fe9e:e7d8/64
 ```
 
 `ens3` is mine, yours will be listed, the `lo` is just a local loopback interface, ignore it for now. If your IP on your computer is 192.168.1.X instead of 192.168.0.X, be sure to account for that and your gateway IP will end in 1.1 instead of 0.1. somtimes they're different so be aware of that!
+
+You will need to set your DNS server in the PiHole web interface. Be sure to log into the PiHole and set the DNS servers you'd like to use. There are some pre-listed, but you can put in any DNS servers you've found there instead. This should be located in `Settings` then the `DNS` tab under `Upstream DNS Providers`. As long as the VPN connection is working, this *should* send the request over the VPN to those providers.
+
+
 
 ##### Warning!
   * You will need to verify that the requests are actually being sent through your VPN provider FROM the Pihole, your requests are being sent to the PiHole, but the PiHole will forward these requests to a provider of your choosing, you need to ensure these requests are being sent through the VPN.
