@@ -70,9 +70,17 @@ You will need a VPS provider to be your endpoint from which all your DNS traffic
 
 Please include a firewall (such as `ufw`) and setup SSH Key Authentication on the system. Optionally setup Fail2Ban if needed. Also please disable login as root.
 
+If you need a refresher on how to set this up, you can check out Digital Oceans tutorial on [How to setup SSH Key-Based Authentication](https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server)
+
+It is **absolutely ok** to interact with your VPS and do the rest of the config from the PiHole if you're comfortable. If you do you will need generate a private/public key pair for the Pi if you do!
+
+Make sure to generate a private/public keypair for your system if you plan on accessing your VPS, remember you only need to give the server your PUBLIC key information it's in the `id_rsa.pub` file.
+
 This system faces the internet directly and you will need to take *some* precautions at the minimum.
 
-**UFW Config:** Basic setup of UFW to allow SSH and DNS requests over the VPN Only.
+**UFW Config:** Basic setup of UFW to allow SSH connection so you can setup the server.
+
+**Run commands interacting with ufw as root!**
 
 Setup default deny incoming packets `ufw default deny incoming`
 
@@ -89,6 +97,8 @@ Install and setup [Wireguard](https://github.com/angristan/wireguard-install) on
 I use this automated install of Wireguard as it sets up a very nice Wireguard install and allows you to setup the individual computers and mobile devices with not just the keys but different keys for EACH device which adds more security. More information about the setup and why at the github link, I've reviewed the install and wireguard configs that are created and they're consistent and standardized and have worked flawlessly for years on my setups.
 
 When running the Wireguard Install script be sure to run it again after install to setup a new client, the script is really easy to use.
+
+You will need to transfer the resulting `wg0-client.conf` (or similarly named file) from the VPS to your PiHole.
 
 ##### Note
 You will need to take down the **port** number used in the VPN setup so that you can tell UFW to filter any DNS requests from anywhere except your VPN connection. This ensures your VPS will not be used by someone else on the public internet. This tells the VPS to only respond to DNS queries over the VPN and nowhere else! The port number assigned is **random**, so be sure to **write it down**.
@@ -120,11 +130,6 @@ Run: `ufw status numbered`
 [ 8] 53 (v6) on wg0             ALLOW IN    Anywhere (v6)
 ```
 
-
-
-
-
-
 #### Step Six
 Setup the PiHole to have access to the VPS via Wireguard and confirm the connection is usable
 
@@ -139,3 +144,4 @@ Add DNS servers to the config (odd quirk here to note about loosing config if it
 Setup the PiHole to use the VPS as it's DNS providers
 
 Final step is to tell your Wifi/Home Router to use the PiHole as your DNS provider!
+
