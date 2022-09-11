@@ -1,6 +1,6 @@
 ### Encrypted and Cached DNS for your Local Network
 
-This setup allows your DNS queries to be encrypted and cached at the local network level. This is NOT to be confused with the commonly referred to as "DOH" (DNS Over HTTPS) or any Secure Transport of DNS directly. This is DNS over a VPN to prevent your ISP from knowing your DNS queries and Caching the DNS queries for your local network.  
+This setup allows your DNS queries to be encrypted and cached at the local network level. This is NOT to be confused with the commonly referred to as "DOH" (DNS Over HTTPS) or any Secure Transport of DNS directly. This is DNS over a VPN to prevent your ISP from knowing your DNS queries and Caching the DNS queries for your local network.
 
 This setup is an intermediate to advanced difficulty depending on your experience with Linux. The Example provided in the Optional section is what I use personally. The simple VPN on the Pihole is currently **untested** by me. This guide may be updated and changed with no notice by me at anytime.
 
@@ -68,4 +68,29 @@ You will need a VPS provider to be your endpoint from which all your DNS traffic
 
 **Setup your VPS**
 
-Please include a firewall (such as `ufw`) and setup SSH Key Authentication on the system. Optionally setup Fail2Ban if needed. This system faces the internet directly and you will need to take *some* precautions at the minimum.
+Please include a firewall (such as `ufw`) and setup SSH Key Authentication on the system. Optionally setup Fail2Ban if needed. Also please disable login as root.
+
+This system faces the internet directly and you will need to take *some* precautions at the minimum.
+
+#### Step Five
+
+Install and setup [Wireguard](https://github.com/angristan/wireguard-install) on the VPS after setting it up with a firewall and ssh key authentication (seriously... do not forget that part).
+
+I use this automated install of Wireguard as it sets up a very nice Wireguard install and allows you to setup the individual computers and mobile devices with not just the keys but different keys for EACH device which adds more security. More information about the setup and why at the github link, I've reviewed the install and wireguard configs that are created and they're consistent and standardized and have worked flawlessly for years on my setups.
+
+When running the Wireguard Install script be sure to run it again after install to setup a new client, the script is really easy to use.
+
+#### Step Six
+Setup the PiHole to have access to the VPS via Wireguard and confirm the connection is usable
+
+
+#### Step Seven
+Setup Unbound on the VPS to process DNS queries.
+
+Add DNS servers to the config (odd quirk here to note about loosing config if it restarts)
+
+
+#### Step Eight
+Setup the PiHole to use the VPS as it's DNS providers
+
+Final step is to tell your Wifi/Home Router to use the PiHole as your DNS provider!
