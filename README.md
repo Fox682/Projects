@@ -8,6 +8,10 @@
   * Enable Tap to Click for Laptops
 * [Setup zRAM for Low Memory Systems](https://github.com/Fox682/Projects/blob/master/zRAM%20Setup.md)
   * Requirements: SystemD  
+* [Debian Golden Image](https://github.com/Fox682/Projects/blob/master/Debian_Golden.md)
+* [Encrypted & Cached DNS Requests](https://github.com/Fox682/Projects/blob/master/placeholder.md)
+  * Requirements (minimal): Pihole with VPN access
+  * Requirements (full): Pihole, VPS (with wireguard & unbound), wireguard client
 
 **Future:**  
-- YTDL (latest and updatable) with MPV
+- TBD
