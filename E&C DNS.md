@@ -158,7 +158,11 @@ Setup default deny incoming packets `ufw default deny incoming`
 
 Setup to allow outgoing packets `ufw default allow outgoing`
 
-Enable ssh connections `ufw allow ssh`
+Allow ssh connections `ufw allow ssh`
+
+Enable ufw. If you forgot to allow ssh, then then next time you try to login via ssh on your VPS, you are going to have a bad time, so **be sure you allow ssh**.
+
+`ufw enable`
 
 
 
