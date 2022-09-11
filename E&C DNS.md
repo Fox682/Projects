@@ -65,16 +65,59 @@ From there you can tell the openvpn client to use that file.
 
 `openvpn --config /home/pi/openvpnfile.ovpn`
 
-If you're using wireguard the equivilent command is:
+If you're using wireguard the equivalent command is: (this assumes that your config is in `/etc/wireguard/wg0.conf`)
 
 `wg-quick up wg0`
+
+**Set your PiHole to have a static IP address:**
+
+When your set your router to an IP to use for DNS, you don't want your Pihole to "move" from it's current location to one you don't know!
+
+You will need to modify the file `/etc/network/interfaces` to include the IP address to use on the network.
+
+```
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+#source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+#allow-hotplug ens3
+#iface ens3 inet dhcp
+
+# Primary Network interface (Static)
+auto ens3
+iface ens3 inet static
+        address 192.168.0.200
+        gateway 192.168.0.1
+```
+
+The hash symbol `#` (or pound if you're old school like me) denotes that this line is a `comment` line, meaning it's just there for notes and not processed. Below is the contents of my interfaces file on my PiHole. My network interface is `ens3` and the modified config is under `# Primary Network Interface (static)`. Be sure no other computers are currently using the IP address you want to give it, mine is `192.168.0.200` that should be outside the DHCP range that routers normally assign IPs for, so it *should* be safe to use on your network also. Please note that your network interface will likely be different. To find yours on your pi (or linux machine) you can use:
+
+```
+user@pihole:~$ ip -br -c a
+lo               UNKNOWN        127.0.0.1/8 ::1/128
+ens3             UP             192.168.0.200/24 fe80::5054:ff:fe9e:e7d8/64
+```
+
+`ens3` is mine, yours will be listed, the `lo` is just a local loopback interface, ignore it for now. If your IP on your computer is 192.168.1.X instead of 192.168.0.X, be sure to account for that and your gateway IP will end in 1.1 instead of 0.1. somtimes they're different so be aware of that!
 
 ##### Warning!
   * You will need to verify that the requests are actually being sent through your VPN provider FROM the Pihole, your requests are being sent to the PiHole, but the PiHole will forward these requests to a provider of your choosing, you need to ensure these requests are being sent through the VPN.
   * There are various methods for doing this, you will need to find and use one.
   * Personally I used `termshark` to review the traffic to see if the dns requests are being sent over the encrypted link. How to use Termshark is outside the scope of this general guide.
 
-From here we should be done, please note that this setup above is currently **untested** by me personally, but it *should* work. It will need tested and I need feedback as I will test this later. I use the optional setup which is easier to verify but more difficult to setup.
+From here we should be almost done, all that's left should be to setup the Pi-Hole's IP address to be the sole DNS provider for your network. So you will need to login to your Wifi/Home Router and change the DNS provider to be the PiHole. You may need to restart the router and/or your computer's wifi interface to get the new information.
+
+Using a PI is recommended as it's a nice low-power device that can keep running 24/7. If your PiHole does down, your internet will look like it just went out. If your internet doesn't work **check your PiHole first** make sure it's online and talking to the internet.
+
+If you're using the optional setup, then the PiHole will be pointed to your VPS as the DNS provider instead, see below if you want to go further down that rabbit hole!
+
+Please note that this setup above is currently **untested** by me personally, but it *should* work. It will need tested and I need feedback as I will test this later. I use the optional setup which is somewhat easier to verify but more difficult to setup.
 
 
 #### Step Four (Optional Setup!)
@@ -159,7 +202,7 @@ Setup the PiHole to have access to the VPS via Wireguard and confirm the connect
 #### Step Seven
 Setup Unbound on the VPS to process DNS queries.
 
-Add DNS servers to the config (odd quirk here to note about loosing config if it restarts)
+Add DNS servers to the config (odd quirk here to note about loosing config if it restarts). Fix is to modify the interfaces file to include the requested DNS servers after reboot?
 
 
 #### Step Eight
