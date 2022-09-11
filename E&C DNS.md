@@ -72,6 +72,16 @@ Please include a firewall (such as `ufw`) and setup SSH Key Authentication on th
 
 This system faces the internet directly and you will need to take *some* precautions at the minimum.
 
+**UFW Config:** Basic setup of UFW to allow SSH and DNS requests over the VPN Only.
+
+Setup default deny incoming packets `ufw default deny incoming`
+
+Setup to allow outgoing packets `ufw default allow outgoing`
+
+Enable ssh connections `ufw allow ssh`
+
+
+
 #### Step Five
 
 Install and setup [Wireguard](https://github.com/angristan/wireguard-install) on the VPS after setting it up with a firewall and ssh key authentication (seriously... do not forget that part).
@@ -79,6 +89,41 @@ Install and setup [Wireguard](https://github.com/angristan/wireguard-install) on
 I use this automated install of Wireguard as it sets up a very nice Wireguard install and allows you to setup the individual computers and mobile devices with not just the keys but different keys for EACH device which adds more security. More information about the setup and why at the github link, I've reviewed the install and wireguard configs that are created and they're consistent and standardized and have worked flawlessly for years on my setups.
 
 When running the Wireguard Install script be sure to run it again after install to setup a new client, the script is really easy to use.
+
+##### Note
+You will need to take down the **port** number used in the VPN setup so that you can tell UFW to filter any DNS requests from anywhere except your VPN connection. This ensures your VPS will not be used by someone else on the public internet. This tells the VPS to only respond to DNS queries over the VPN and nowhere else! The port number assigned is **random**, so be sure to **write it down**.
+
+You can set it to use a specific port number, I like to use 11111. Pick whatever number you like above 1024 and below 65,535. Have fun with it.
+
+**UFW setup:** (did you write down the port number?)
+
+`ufw allow 11111`
+
+Tell ufw to let in traffic for DNS (port 53) but ONLY through the Wiregaurd interface
+
+`ufw allow in on wg0 to any port 53`
+
+If you did the above correctly you should be able to check the results:
+
+Run: `ufw status numbered`
+
+```
+     To                         Action      From
+     --                         ------      ----
+[ 1] 22                         ALLOW IN    Anywhere
+[ 2] 22/tcp                     ALLOW IN    Anywhere
+[ 3] 11111/udp                  ALLOW IN    Anywhere
+[ 4] 53 on wg0                  ALLOW IN    Anywhere
+[ 5] 22 (v6)                    ALLOW IN    Anywhere (v6)
+[ 6] 22/tcp (v6)                ALLOW IN    Anywhere (v6)
+[ 7] 11111/udp (v6)             ALLOW IN    Anywhere (v6)
+[ 8] 53 (v6) on wg0             ALLOW IN    Anywhere (v6)
+```
+
+
+
+
+
 
 #### Step Six
 Setup the PiHole to have access to the VPS via Wireguard and confirm the connection is usable
