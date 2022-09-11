@@ -94,9 +94,12 @@ auto ens3
 iface ens3 inet static
         address 192.168.0.200
         gateway 192.168.0.1
+
 ```
 
-The hash symbol `#` (or pound if you're old school like me) denotes that this line is a `comment` line, meaning it's just there for notes and not processed. Below is the contents of my interfaces file on my PiHole. My network interface is `ens3` and the modified config is under `# Primary Network Interface (static)`. Be sure no other computers are currently using the IP address you want to give it, mine is `192.168.0.200` that should be outside the DHCP range that routers normally assign IPs for, so it *should* be safe to use on your network also. Please note that your network interface will likely be different. To find yours on your pi (or linux machine) you can use:
+The hash symbol `#` (or pound if you're old school like me) denotes that this line is a `comment` line, meaning it's just there for notes and not processed. Above is the contents of my interfaces file on my PiHole (almost). My network interface is `ens3` and the modified config is under `# Primary Network Interface (static)`. Be sure no other computers are currently using the IP address you want to give it, mine is `192.168.0.200` that should be outside the DHCP range that routers normally assign IPs for, so it *should* be safe to use on your network also.
+
+Please note that your network interface will likely be different. To find yours on your pi (or linux machine) you can use:
 
 ```
 user@pihole:~$ ip -br -c a
@@ -104,7 +107,7 @@ lo               UNKNOWN        127.0.0.1/8 ::1/128
 ens3             UP             192.168.0.200/24 fe80::5054:ff:fe9e:e7d8/64
 ```
 
-`ens3` is mine, yours will be listed, the `lo` is just a local loopback interface, ignore it for now. If your IP on your computer is 192.168.1.X instead of 192.168.0.X, be sure to account for that and your gateway IP will end in 1.1 instead of 0.1. somtimes they're different so be aware of that!
+`ens3` is mine, yours will be listed, the `lo` is just a local loopback interface, ignore it for now. If your IP on your computer is 192.168.1.X instead of 192.168.0.X, be sure to account for that and your gateway IP will end in 1.1 instead of 0.1 sometimes they're different so be aware of that!
 
 You will need to set your DNS server in the PiHole web interface. Be sure to log into the PiHole and set the DNS servers you'd like to use. There are some pre-listed, but you can put in any DNS servers you've found there instead. This should be located in `Settings` then the `DNS` tab under `Upstream DNS Providers`. As long as the VPN connection is working, this *should* send the request over the VPN to those providers.
 
