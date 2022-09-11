@@ -9,7 +9,7 @@
 * [Setup zRAM for Low Memory Systems](https://github.com/Fox682/Projects/blob/master/zRAM%20Setup.md)
   * Requirements: SystemD  
 * [Debian Golden Image](https://github.com/Fox682/Projects/blob/master/Debian_Golden.md)
-* [Encrypted & Cached DNS Requests](https://github.com/Fox682/Projects/blob/master/placeholder.md)
+* [Encrypted & Cached DNS Requests](https://github.com/Fox682/Projects/blob/master/E%26C%20DNS.md)
   * Requirements (minimal): Pihole with VPN access
   * Requirements (full): Pihole, VPS (with wireguard & unbound), wireguard client
 
