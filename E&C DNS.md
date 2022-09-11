@@ -47,6 +47,28 @@ This is one of those steps that depends entirely on the setup you choose. If you
 
 There is an OpenVPN client and a Wireguard Client that can be installed and use via the command line. If you are using a service such as ProtonVPN or NordVPN, you will need to find the OVPN file (for OpenVPN). I've used ProtonVPN and they have instructions for getting the file on their website.
 
+Install the OpenVPN Client:
+
+`apt install openvpn`
+
+Install the Wireguard Client and tools: (if needed)
+
+`apt install wireguard wireguard-tools`
+
+If you have a downloaded file (ie a *.ovpn file or *.conf file for wireguard) and you need to transfer that file you'll need an SCP client. On linux it's as easy as `scp` but on other systems (windows) it's not straight forward. On linux if you need to transfer a file from your computer to your PiHole this should get you there.
+
+If your file is located on your system in `/home/user/openvpnfile.ovpn` and your home folder on your pihole is `/home/pi/` then the command to transfer it using scp is `scp [source location] [destination location]`:
+
+`scp /home/user/ovpnfile.ovpn pi@192.168.0.200:/home/pi/`
+
+From there you can tell the openvpn client to use that file.
+
+`openvpn --config /home/pi/openvpnfile.ovpn`
+
+If you're using wireguard the equivilent command is:
+
+`wg-quick up wg0`
+
 ##### Warning!
   * You will need to verify that the requests are actually being sent through your VPN provider FROM the Pihole, your requests are being sent to the PiHole, but the PiHole will forward these requests to a provider of your choosing, you need to ensure these requests are being sent through the VPN.
   * There are various methods for doing this, you will need to find and use one.
@@ -144,4 +166,3 @@ Add DNS servers to the config (odd quirk here to note about loosing config if it
 Setup the PiHole to use the VPS as it's DNS providers
 
 Final step is to tell your Wifi/Home Router to use the PiHole as your DNS provider!
-
