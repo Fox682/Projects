@@ -209,7 +209,7 @@ Run: `ufw status numbered`
 #### Step Six
 Setup the PiHole to have access to the VPS via Wireguard and confirm the connection is usable
 
-TO DO: Next! Test 1, 2, 3.
+TO DO: Next! Test 1, 2, 3, 4.
 
 #### Step Seven
 Setup Unbound on the VPS to process DNS queries.
