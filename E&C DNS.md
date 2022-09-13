@@ -113,7 +113,7 @@ ens3             UP             192.168.0.200/24 fe80::5054:ff:fe9e:e7d8/64
 
 You will need to set your DNS server in the PiHole web interface. Be sure to log into the PiHole and set the DNS servers you'd like to use. There are some pre-listed, but you can put in any DNS servers you've found there instead. This should be located in `Settings` then the `DNS` tab under `Upstream DNS Providers`. As long as the VPN connection is working, this *should* send the request over the VPN to those providers.
 
-
+You can check using [DNSLeaktest](https://www.dnsleaktest.com/), the queries should ultimately be coming from your VPN provider, NOT your ISP or from multiple DNS providers.
 
 ##### Warning!
   * You will need to verify that the requests are actually being sent through your VPN provider FROM the Pihole, your requests are being sent to the PiHole, but the PiHole will forward these requests to a provider of your choosing, you need to ensure these requests are being sent through the VPN.
