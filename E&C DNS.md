@@ -263,6 +263,8 @@ Login to your PiHole, using SCP you should be able to transfer a file with somet
 
 Next is to transfer this file to the correct location with a simpler interface name so that you can fire up the interface and make sure it works!
 
+**Do this as root**
+
 `mv wg0-client-pihole.conf /etc/wireguard/wg0.conf`
 
 Let's fire it up!
@@ -286,15 +288,228 @@ Ping it!
 
 `ping -c 4 10.10.10.1`
 
-If you get a response, you're successfully setup a wireguard link.
+If you get a response, you're successfully setup a wireguard link. So we now have a PiHole with a WireGuard link to the VPS. Onward!
 
 #### Step Seven
 Setup Unbound on the VPS to process DNS queries.
 
-Add DNS servers to the config (odd quirk here to note about loosing config if it restarts). Fix is to modify the interfaces file to include the requested DNS servers after reboot?
+`unbound` is a DNS server that is relatively simple to setup, and since we're only using this for your network, it doesn't need a complex setup.
 
+Install unbound as **root**:
+
+`apt install unbound unbound-host`
+
+Get the list of root DNS servers:
+
+`curl -o /var/lib/unbound/root.hints https://www.internic.net/domain/named.cache`
+
+Protect the Program from being run by anything else:
+
+`chown -R unbound:unbound /var/lib/unbound`
+
+Lets enable the service after modifying the Unbound configuration file. Open the file and lets make a couple changes:
+
+`nano /etc/unbound/unbound.conf`
+
+The only change on the lines needed are:
+
+`interface: 10.10.10.1`
+
+and
+
+`access-control: 10.10.10.0/24         allow`
+
+Adjusting these lines ensure that the interface for the DNS is the WireGuard interface and to ensure that ONLY addresses from WireGuard can submit requests to the DNS server. The `unbound.conf` file is listed below.
+
+```
+server:
+
+  num-threads: 2
+
+  #Enable logs
+  verbosity: 1
+
+  #list of Root DNS Server
+  root-hints: "/var/lib/unbound/root.hints"
+
+  #Use the root servers key for DNSSEC
+  auto-trust-anchor-file: "/var/lib/unbound/root.key"
+
+  #Respond to DNS requests on all interfaces
+  interface: 10.10.10.1
+  max-udp-size: 3072
+
+ #Authorized IPs to access the DNS Server
+ # access-control: 0.0.0.0/0                 refuse
+ # access-control: 127.0.0.1                 allow
+  access-control: 10.10.10.0/24         allow
+
+  #not allowed to be returned for public internet  names
+  #private-address: 10.200.200.0/24
+
+  # Hide DNS Server info
+  hide-identity: yes
+  hide-version: yes
+
+  #Limit DNS Fraud and use DNSSEC
+  harden-glue: yes
+  harden-dnssec-stripped: yes
+  harden-referral-path: yes
+
+  #Add an unwanted reply threshold to clean the cache and avoid when possible a>
+  unwanted-reply-threshold: 10000000
+
+  #Have the validator print validation failures to the log.
+  val-log-level: 1
+
+  #Minimum lifetime of cache entries in seconds
+  cache-min-ttl: 1800
+
+  #Maximum lifetime of cached entries
+  cache-max-ttl: 14400
+  prefetch: yes
+  prefetch-key: yes
+```
+
+Next step is to enable the `unbound` service and ensure that it's running on the system.
+
+```
+root@debian:~# systemctl start unbound
+root@debian:~# systemctl status unbound
+● unbound.service - Unbound DNS server
+     Loaded: loaded (/lib/systemd/system/unbound.service; enabled; vendor prese>
+     Active: active (running) since Mon 2022-09-12 18:34:22 MDT; 7s ago
+       Docs: man:unbound(8)
+    Process: 17603 ExecStartPre=/usr/lib/unbound/package-helper chroot_setup (c>
+    Process: 17606 ExecStartPre=/usr/lib/unbound/package-helper root_trust_anch>
+   Main PID: 17609 (unbound)
+      Tasks: 2 (limit: 250)
+     Memory: 9.7M
+        CPU: 35ms
+     CGroup: /system.slice/unbound.service
+             └─17609 /usr/sbin/unbound -d -p
+
+Sep 12 18:34:22 deb systemd[1]: Starting Unbound DNS server...
+Sep 12 18:34:22 deb unbound[17609]: [17609:0] notice: init module 0: subnet
+Sep 12 18:34:22 deb unbound[17609]: [17609:0] notice: init module 1: validator
+Sep 12 18:34:22 deb unbound[17609]: [17609:0] notice: init module 2: iterator
+Sep 12 18:34:22 deb systemd[1]: Started Unbound DNS server.
+Sep 12 18:34:22 deb unbound[17609]: [17609:0] info: start of service (unbound 1
+```
+
+We now have a running Unbound service on our VPS that responds to ONLY the WireGuard interface. Next lets make sure it actually works and tell the PiHole to use this as the DNS provider, we're almost done!
+
+**Optional Step**
+
+You can setup DNS providers on your VPS if you have a preference, this will ultimately be the source of your DNS queries. Most VPS providers will automatically give you the DNS they use.
+
+If you want to see what that is you can `cat` or `nano` the `resolv.conf` file on the VPS, ie.
+
+`nano /etc/resolv.conf`
+
+You can modify this file however it will be overwritten if the server is rebooted. A more permanent change is to edit the the `/etc/network/interfaces` file to add DNS entries there (recommended).
+
+Add `dns-nameservers [ip] [ip]` line below the `iface` line (file shows some unfiltered DNS servers, beware! Use OpenDNS servers if you prefer):
+
+```
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+allow-hotplug ens3
+iface ens3 inet dhcp
+dns-nameservers 89.233.43.71 76.76.2.0 #MODIFY THIS LINE TO THE FILE
+```
+
+Onward!
 
 #### Step Eight
-Setup the PiHole to use the VPS as it's DNS providers
+Verify DNS is working from the VPS and the WireGuard interface. Setup the PiHole to use the VPS as it's DNS provider.
 
-Final step is to tell your Wifi/Home Router to use the PiHole as your DNS provider!
+Let's go back to the PiHole Command Line. Be sure you installed `dig`, if you forgot, lets go ahead and do it now.
+
+As root: `apt install dnsutils` (dig needs to be installed on Debian)
+
+Let's use `dig`!
+
+`dig @10.10.10.1 random.com`
+
+```
+root@deb:~# dig random.com
+
+; <<>> DiG 9.16.27-Debian <<>> random.com
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 17462
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 2, ADDITIONAL: 3
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 9f52705a58a3caba7c03e0e1631fd4661b53bde17410223e (good)
+;; QUESTION SECTION:
+;random.com.                    IN      A
+
+;; ANSWER SECTION:
+random.com.             604792  IN      A       207.21.195.86
+
+;; AUTHORITY SECTION:
+random.com.             172791  IN      NS      ns1.salepage.com.
+random.com.             172791  IN      NS      ns2.salepage.com.
+
+;; ADDITIONAL SECTION:
+ns1.salepage.com.       165728  IN      A       66.113.234.96
+ns2.salepage.com.       165728  IN      A       5.1.88.159
+
+;; Query time: 19 msec
+;; SERVER: 10.10.10.1#53(10.10.10.1)
+;; WHEN: Mon Sep 12 18:52:54 MDT 2022
+;; MSG SIZE  rcvd: 160
+```
+When you run this on your PiHole, you should have an entry where it says `SERVER:` under `Query time:` it should show the WireGuard address of your VPS. If this works, then the DNS queries are able to go over the wireguard interface to your VPS. Yay!
+
+Make sure the PiHole is set to use your VPS as the DNS server using the WireGuard interface.
+
+  * Login to your Pihole
+  * Goto `Settings` on the left
+  * Goto `DNS` Tab on the top
+  * Under Upstream DNS Servers change the DNS IP to your WireGuard interface ie. `10.10.10.1`
+  * Goto the Bottom Right of the Page hit `SAVE`
+  * Go back to the `System` Tab on the top, click `Restart DNS resolver`
+
+This will ensure the changes take effect.
+
+We can make sure that DNS is working properly by running `dig` on your systems to make sure DNS is being routed properly.
+
+`dig` according to my desktop linux system: (goes to the PiHole to filter the requests)
+
+```
+;; Query time: 19 msec
+;; SERVER: 192.168.0.200#53(192.168.0.200)
+;; WHEN: Mon Sep 12 18:52:54 MDT 2022
+;; MSG SIZE  rcvd: 160
+```
+
+`dig` according to the PiHole: (goes to the VPS via WireGuard!)
+
+```
+;; Query time: 19 msec
+;; SERVER: 10.10.10.1#53(10.10.10.1)
+;; WHEN: Mon Sep 12 18:52:54 MDT 2022
+;; MSG SIZE  rcvd: 160
+```
+
+That should do it!
+
+Now you have a VPS with a WireGuard VPN that you can route all your DNS requests to your PiHole which can filter your queries over an encrypted connection for all your devices on your network.
+
+As a bonus the VPN setup works even if your mobile! It will not only give you DNS responses as long as your on the VPN (get the wireguard app for your Phone!), No more DNS leaks! It will also give you access to the PiHole and other computers on your network that are also on your VPN.
+
+**Optional**
+
+You can modify the Unbound Conf file to change the lifetime of the cached entries if you want the DNS server to hold on to the queries for a longer time, if you have any significant number of devices on your network, this will help keep things responding quickly.
