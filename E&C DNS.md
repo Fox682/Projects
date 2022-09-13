@@ -504,6 +504,11 @@ We can make sure that DNS is working properly by running `dig` on your systems t
 ;; MSG SIZE  rcvd: 160
 ```
 
+Make sure your Wifi/Home Router is using the ip address of your PiHole as it's sole DNS Provider! You may need to restart your router and/or your wifi network interface(s) for the changes to take effect.
+
+Login to the PiHole to view the Dashboard to ensure you're getting queries from devices.
+
+
 That should do it!
 
 Now you have a VPS with a WireGuard VPN that you can route all your DNS requests to your PiHole which can filter your queries over an encrypted connection for all your devices on your network.
