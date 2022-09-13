@@ -1,6 +1,6 @@
 ### Encrypted and Cached DNS for your Local Network
 
-This setup allows your DNS queries to be encrypted and cached at the local network level. This is NOT to be confused with the commonly referred to as "DOH" (DNS Over HTTPS) or any Secure Transport of DNS directly. This is DNS over a VPN to prevent your ISP from knowing your DNS queries and Caching the DNS queries for your local network.
+This setup allows your DNS queries to be encrypted and cached at the local network level. This is NOT to be confused with the commonly referred to as "DOH" (DNS Over HTTPS) or any Secure Transport of DNS directly. This is DNS over a VPN to prevent your ISP from knowing your DNS queries and Caching the DNS queries for your local network for faster access.
 
 This setup is an intermediate to advanced difficulty depending on your experience with Linux. The Example provided in the Optional section is what I use personally. The simple VPN on the Pihole is currently **untested** by me. This guide may be updated and changed with no notice by me at anytime.
 
@@ -10,11 +10,11 @@ Requirements:
     * Ability to change your DNS settings
   * Virtual Machine/Spare Computer or Raspberry Pi (B or Better recommended)
     * Install [PiHole](https://docs.pi-hole.net/main/basic-install/) on this system
-    * Install and setup a VPN client for PiHole (OpenVPN, [Wireguard](https://github.com/angristan/wireguard-install) <- Preferred)
+    * Install and setup a VPN client for PiHole (OpenVPN, [Wireguard](https://github.com/angristan/wireguard-install) <- Preferred, if using the VPS)
     * Use `dig` on Pihole to verify DNS is working
       * As root: `apt install dnsutils` (dig needs to be installed on Debian)
       * If using the Optional Setup, this will ensure the requests are going over the encrypted connection.
-    * Optional: Setup a VPS with Unbound to be a multi-purpose VPN hub for the Network
+    * Optional (Advanced) Steps: Setup a VPS with Unbound to be a multi-purpose VPN hub for the Network
       * Roll your own Source for Encrypted DNS!
       * Use as a normal VPN to access your Home Network!
       * Need to install Unbound and Wireguard/OpenVPN to connect with Pihole
@@ -54,6 +54,8 @@ Install the OpenVPN Client:
 Install the Wireguard Client and tools: (if going down the VPS rabbit hole)
 
 `apt install wireguard wireguard-tools`
+
+**SCP Usage Crash Course**
 
 If you have a downloaded file (ie a *.ovpn file or *.conf file for wireguard) and you need to transfer that file you'll need an SCP client. On linux it's as easy as `scp` but on other systems (windows) it's not straight forward. On linux if you need to transfer a file from your computer to your PiHole this should get you there.
 
@@ -128,7 +130,11 @@ Please note that this setup above is currently **untested** by me personally, bu
 
 
 #### Step Four (Optional Setup!)
-This step is optional but I have been able to confirm that this is working. All DNS traffic forwarded from the PiHole goes through the Wireguard connection to the VPS (Virual private Server) and the VPS fetches the requests on it's end.
+The following steps are optional but I have been able to confirm that this is working. All DNS traffic forwarded from the PiHole goes through the Wireguard connection to the VPS (Virual private Server) and the VPS fetches the requests on it's end.
+
+As an Added bonus the VPS will act as a hub for your own VPN network allowing you to access computers on your network attached to your VPN. It will also serve as a DNS provider to use while you are outside your normal network.
+
+**Warning:** Do not do "illegal" things using your VPS. Any activity that violates the TOS/AUP for the VPS provider will cause them to destroy your VPS and depending on legality, have your information sent to authorities. You are encouraged to do research on VPS providers.
 
 ##### Notes:
 You will need a VPS provider to be your endpoint from which all your DNS traffic will ultimately originate from.
@@ -144,7 +150,7 @@ Please include a firewall (such as `ufw`) and setup SSH Key Authentication on th
 
 If you need a refresher on how to set this up, you can check out Digital Oceans tutorial on [How to setup SSH Key-Based Authentication](https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server)
 
-It is **absolutely ok** to interact with your VPS and do the rest of the config from the PiHole if you're comfortable. If you do you will need generate a private/public key pair for the Pi if you do!
+It is **absolutely ok** to interact with your VPS and do the rest of the config from the PiHole if you're comfortable. If you do you will need generate a private/public key pair for the Pi if you do! This is a great option if you do not have a virtual machine or another linux/unix based computer around.
 
 Make sure to generate a private/public keypair for your system if you plan on accessing your VPS, remember you only need to give the server your PUBLIC key information it's in the `id_rsa.pub` file.
 
@@ -207,9 +213,81 @@ Run: `ufw status numbered`
 ```
 
 #### Step Six
-Setup the PiHole to have access to the VPS via Wireguard and confirm the connection is usable
+Setup the PiHole to have access to the VPS via Wireguard and confirm the connection is usable.
 
-TO DO: Next! Test 1, 2, 3, 4, 5, 6, 7.
+Install the Wireguard Client and tools on the PiHole if you haven't already.
+
+`apt install wireguard wireguard-tools`
+
+Generate a client wireguard.conf file by re-running the Wireguard script from the VPS (not the PiHole!).
+
+```
+root@debian:~# ls
+wireguard-install.sh
+root@debian:~# ./wireguard-install.sh
+Welcome to WireGuard-install!
+The git repository is available at: https://github.com/angristan/wireguard-install
+
+It looks like WireGuard is already installed.
+
+What do you want to do?
+   1) Add a new user
+   2) Revoke existing user
+   3) Uninstall WireGuard
+   4) Exit
+Select an option [1-4]:
+```
+
+Verify that you've generated a config file.
+
+```
+root@vulp:~# ls -hal
+-rw-r--r--  1 root root  325 Aug 25 19:16 wg0-client-pihole.conf
+```
+
+This `wg0-client-pihole.conf` needs to be transferred. If you setup the key-based authentication it should be straight forward, use SCP to transfer the file, you can use the PiHole for this.
+
+**Note:** If you've used linux for a good length of time (if you have not, this is important!) you'll notice that the file is owned by root and since we can't login as root, we wont be able to transfer the file directly, we'll need to change the ownership and location for the file.
+
+Assuming `user` is the username of the account on your VPS:
+
+`chown user:user wg0-client-pihole.conf`
+
+Move the file to the user account
+
+`mv wg0-client-pihole.conf /home/user`
+
+Login to your PiHole, using SCP you should be able to transfer a file with something similar to (change your IP to match your VPS):
+
+`scp user@29.26.30.32:/home/user/wg0-client-pihole.conf /home/pi/`
+
+Next is to transfer this file to the correct location with a simpler interface name so that you can fire up the interface and make sure it works!
+
+`mv wg0-client-pihole.conf /etc/wireguard/wg0.conf`
+
+Let's fire it up!
+
+`wg-quick up wg0`
+
+Next, run `ip a` to see if the interface has been created, if this worked you should see something like this with an entry for `wg0`.
+
+```
+root@debian:~# ip a
+
+3: wg0: <POINTOPOINT,NOARP,UP,LOWER_UP> mtu 1420 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/none
+    inet 10.10.10.1/24 scope global wg0
+       valid_lft forever preferred_lft forever
+    inet6 fd42:42:42::1/64 scope global
+       valid_lft forever preferred_lft forever
+```
+
+Ping it!
+
+`ping -c 4 10.10.10.1`
+
+If you get a response, you're successfully setup a wireguard link.
+
 #### Step Seven
 Setup Unbound on the VPS to process DNS queries.
 
