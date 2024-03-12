@@ -31,7 +31,8 @@ We need to be able to do the following:
 - Store game state (piece placement) per turn
 - Store the final state (Win or Cat (Stalemate) )
 - Who went where and who's turn is it (replay)
-- Determine the Winner 
+- Determine the Winner
+- Store the game state in the most asinine way I can think of 
 
 #### The Problem:
 How do we store a the state of a game of Tic-Tac-Toe?
