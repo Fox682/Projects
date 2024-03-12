@@ -38,20 +38,59 @@ We need to be able to do the following:
 How do we store a the state of a game of Tic-Tac-Toe?
 
 Well, you might say that's really simple, you take the binary representation of 
-each "cell" (there are 9 in Tic-Tac-Toe) and then string the bits together and you'll 
+each "cell" (there are 9 in Tic-Tac-Toe) and then string (append) the bits together and you'll 
 store all of the bits required for the state of the game.
 
-Of course, this is the obvious solution. Using this we see that we need 2 bits to store 
+```
+Tic-Tac-Toe Board:
+
+X | O | 
+---------
+  | X | O
+---------
+X | O | O
+
+[See if you can spot the error! Clue: Check the rules] 
+```
+Of course, this is an obvious solution. Using this we see that we need 2 bits to store 
 3 values (X, O & Space/Blank) for each of the 9 cells.
 
 ```
+We can use:
+00 - Blank
+01 - X
+10 - O
+11 - Invalid
+
+01 | 10 | 00 
+---------
+00 | 01 | 10
+---------
+01 | 10 | 10
+
+So when we store this, we can do
+
+Game = [011000000110011010]
+
+or 98714 if you're fancy
+
 2 * 9 = 18 bits - problem solved! 
 ```
 
 Yes, this is true. This works and is a very linear way of thinking. To store a full 
-game you'd need a maximum of 9 board states per game:
+game you'd need a maximum of 9 board states per full game (ie. Cat/Draw):
 
 ```
+Game1 = [011000000110011010]
+Game2 = [011000000110011010]
+Game3 = [011000000110011010]
+Game4 = [011000000110011010]
+Game5 = [011000000110011010]
+Game6 = [011000000110011010]
+Game7 = [011000000110011010]
+Game8 = [011000000110011010]
+Game9 = [011000000110011010]
+
 18 * 9 = 162 bits total, bleh...
 ```
 
@@ -75,8 +114,8 @@ First, some rules. For Tic-Tac-Toe, cause those are the only ones I'm going to f
 ### First Innovation: Key Frame Thinking
 
 If I was going to discover another solution I needed to think about this problem in a 
-different way. What if we were to store just the change in the state of the game rather 
-than just the instantaneous state.
+different way (Outside the box!). What if we were to store just the change in the state of the game 
+rather than just the instantaneous state of the board an any time.
 
 As each player moves we simply put a 1 where a player moves. Simple! 
 
