@@ -29,8 +29,11 @@ Otherwise, whats the fun in that?
 #### The Problem:
 How do we store a the state of a game of Tic-Tac-Toe?
 
-First, we need some Goals so we can make sure we have enough information so we can play the game
-and determine who won.
+I took a personal spin on this. It's nice to be able to store a single state as small as possible.
+But what if we were to store the replay of the game... as well as everything else that goes with 
+Tic-Tac-Toe?
+
+First, we need some Goals so we can make sure we have enough information so we can play the game, determine who won and replay it back.
 
 #### Goals:
 We need to be able to do the following:
@@ -103,18 +106,19 @@ If you're using 15 bits per board state like Chris did (using Base-3), you'd end
 15 * 9 = 135 bits total, that's better! 
 ```
 
-I do like this, but I think I can do better.
+I do like this, but I think I can do better. I may not be able to store a full board state all at once in less
+than 18 bits but... a snapshot of a board, doesn't tell me whos turn it is, who did what and when they did something dumb so that I could win.
 
 First, some rules. For Tic-Tac-Toe, cause those are the only ones I'm going to follow. 
 
 #### Rules
-- First to Move is X then O 
+- First to Move is X then O, always
 - Players keep playing until a Win or the board is filled, a Cats Game (Draw or Stalemate)
-  - We'll do the calculations for full games not including wins in the 3rd play etc.
-- 9 play maximum we're not counting a blank Tic-Tac-Toe board as anything to be stored
+  - We'll do the calculations for full games not including wins in less than 9 moves.
+- We're not counting a blank Tic-Tac-Toe board as anything to be stored
   - That would just compress into a 0, would make no sense.
 
-### First Innovation: Key Frame Thinking
+### First Innovation: Key Frame Thinking Pt. 1
 
 If I was going to discover another solution I needed to think about this problem in a 
 different way (Outside the box!). What if we were to store just the change in the state of the game 
@@ -141,13 +145,13 @@ the pieces went. I can't tell who won... Not enough information. Good job... gen
 
 ...Wait, hold on... If only I had more...
 
-### Second Innovation: Temporal Reconstruction
+### Second Innovation: Temporal Reconstruction (Key Frame Thinking Pt. 2)
 
-...Time, I can use time for each "Frame" in a film and play them back one after the other. 
+...Time, I can use time for each "Frame" in a video and play them back one after the other. 
 I can do the same with Tic-Tac-Toe!
 
 I can even cheat. Check this out, we know that X goes first followed by O each time until 
-the game is complete. I can use this to my advantage.
+the game is played. I can use this to my advantage.
 
 ```
 X goes First:
@@ -191,23 +195,21 @@ BoardT3 = [010000000]
 So with this we have 9 bits per board with a maximum of 9 games. 
 
 ```
-9 * 9 = 81 bits to store a whole game
+9 * 9 = 81 bits to store a whole game state
 ```
 
 Not bad! Not only can I reconstruct the board over time:
 - We intuitively know who went where
-- We also know where they place the piece on the board
+- We also know where they place their pieces on the board
 - We can also determine a winner here pretty easily
 
-On top of all that there's literally only 9 states to keep track of. Friggin Genius!
+On top of all that there's literally only 9 states to keep track of. Friggin Awesome!
 
 Well that was fun! Problem Solved, we can move on... 
 
 > *The Abyss of Insanity* - "No, you can do better... less storage..."
 
-Seriously?!?! *Points finger at the Abyss of Insanity* look, we just went from 162 to 135 to 81 bits 
-to store the game state AND now you have data to reconstruct the whole game from start to finish 
-and you can find out who won. I just cut the storage space in half... exactly what wasted...
+Seriously?!?! I just cut the storage space in half... exactly what wasted...
 
 ### Third Innovation: Space... Spaaaaaaaaace!
 
@@ -215,7 +217,7 @@ and you can find out who won. I just cut the storage space in half... exactly wh
 
 > Past Me Who is a Jerk - "Store the game state in the most asinine way I can think of."
 
-Since we're using a sort of Temporal Reconstruction to store the bits we can, instead of storing 
+Since we're using a sort of Temporal Reconstruction (Key Framing) to store the bits we can, instead of storing 
 all 9 bits per "frame", store the data in an even more esoteric way. 
 
 Using X and Y... I know, I... I can hear the screaming, I just used time and now I'm using space to 
@@ -262,10 +264,12 @@ T3 = [001001]
 
 ```
 
-Using a whopping 6 bits per frame and 9 frames for a whole game crunches this down...
+Using a whopping *6 bits per frame* and 9 frames for a whole game crunches this down...
 
 ```
-9 * 6 = 54 bits... For a whole game of Tic-Tac-Toe... 
+9 * 6 = 54 bits... For a whole game of Tic-Tac-Toe...
+
+From 162 to 54 bits per game that's a 66% savings, not insignificant!
 ```
 
 That's less than 7 bytes... That's less than the amount of space needed to store the word "Esoteric".
@@ -284,26 +288,20 @@ T3 = ["J"]
 
 ```
 
-Of course I *just* realized there's only 63 possible states with this method..
-
-```
-9 states * 6 bits = 63 bits for all possible states
-```
-
 Well that's just plain weird...
 
 ### Conclusions
 
-Well that was fun.
+That was fun.
 
-The caveat of course being that this includes all non-sense and illegal moves and doesn't use "compression", 
+The caveat of course being that this includes all nonsense and illegal moves and doesn't use "compression", 
 the "Key Frame" version of this would be the likely one to compress, there's only 9 states to track (only 9
 bits). For storing multiple games, you'd only need to store difference between the plays. Of course using 
 actual compression to eliminate the 0's (two moves, could have up to 16 0's in a row on the second move!).
 
 If we wanted to have fun we could dig deeper into the 765 possible non-duplicated states. If we used the zeroth
-state in our method here we have 6 bits to play with 2 for reflective duplication and 2 more bits for rotational
-duplication (4 orientations only needs 2 bits N,E,S,W). Then 2 bits left for other fun.
+state in our method here we have 6 bits to play with; 2 for reflective duplication (N/S & E/W), 2 more bits for
+rotational duplication (N,E,S,W), and 1 bit to express if the state has a duplicate or not... etc.
 
 The rest will have to be an exercise to the reader, as storing all possible states is hard since it would 
 require each frame to store the instantanious state which this system doesn't do. You could however do the 18 bit 
@@ -319,11 +317,11 @@ This solution of course is a prime example of the "Space-Time Trade-off". We'll 
 complicated program to save even more space, but you'd be better off with using a little more space 
 to keep the code simpler.
 
-- https://en.m.wikipedia.org/wiki/Space–time_tradeoff
+- [Wikipedia - Space-Time Tradeoff](https://en.m.wikipedia.org/wiki/Space–time_tradeoff)
 
 Don't do what I did. This is maximum overkill. This is also the reason why meta-data IS the data. 
-I'm not actually storing the data, I'm just storing data about the data and reconstructing everything from that. 
-If you find a way to store the whole played game state (9 moves) in less than 54-bits 
+I'm not actually storing the actual data, I'm just storing data about the data and reconstructing everything 
+from that.  If you find a way to store the whole played game state (9 moves) in less than 54-bits
 you're a masochist... and I want to know more.
 
-## Good Luck!
+### Good Luck!
