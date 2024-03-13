@@ -39,7 +39,7 @@ First, we need some Goals so we can make sure we have enough information so we c
 We need to be able to do the following:
 - Store game state (piece placement) per turn
 - Store the final state (Win or Cat (Stalemate) )
-- Who went where and who's turn is it (replay)
+- Who went where and who's turn is it (replay and continue where we left off!)
 - Determine the Winner
 - Store the game state in the most asinine way I can think of 
 
