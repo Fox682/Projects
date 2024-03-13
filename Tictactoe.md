@@ -100,6 +100,7 @@ Game9 = [011010000010011010]
 18 * 9 = 162 bits total, bleh...
 ```
 
+The problem is that you got a bunch of wasted states if you use 2 bits (The invalid "11" above).
 If you're using 15 bits per board state like Chris did (using Base-3), you'd end up with:
 
 ```
@@ -107,14 +108,14 @@ If you're using 15 bits per board state like Chris did (using Base-3), you'd end
 ```
 
 I do like this, but I think I can do better. I may not be able to store a full board state all at once in less
-than 18 bits but... a snapshot of a board, doesn't tell me whos turn it is, who did what and when they did something dumb so that I could win.
+than 15 bits but... a snapshot of a board, doesn't tell me whos turn it is, who did what and when they did
+something dumb so that I could win.
 
 First, some rules. For Tic-Tac-Toe, cause those are the only ones I'm going to follow. 
 
 #### Rules
 - First to Move is X then O, always
-- Players keep playing until a Win or the board is filled, a Cats Game (Draw or Stalemate)
-  - We'll do the calculations for full games not including wins in less than 9 moves.
+- We'll do the calculations for full games not including wins in less than 9 moves.
 - We're not counting a blank Tic-Tac-Toe board as anything to be stored
   - That would just compress into a 0, would make no sense.
 
@@ -180,7 +181,7 @@ Move3: (Obviously X, again)
 ```
 
 For each "frame" of game state I just need to keep a record of each board state for each 
-turn so I can reconstruct everything.
+turn, now I know *where* the pieces were placed. Now, I can reconstruct everything.
 
 ```
 Store each Frame, like this:
@@ -196,10 +197,12 @@ So with this we have 9 bits per board with a maximum of 9 games.
 
 ```
 9 * 9 = 81 bits to store a whole game state
+
+From 162 to 81 bits per game that cuts storage in half for the whole game!
 ```
 
 Not bad! Not only can I reconstruct the board over time:
-- We intuitively know who went where
+- We know whos turn it is 
 - We also know where they place their pieces on the board
 - We can also determine a winner here pretty easily
 
@@ -269,7 +272,7 @@ Using a whopping *6 bits per frame* and 9 frames for a whole game crunches this 
 ```
 9 * 6 = 54 bits... For a whole game of Tic-Tac-Toe...
 
-From 162 to 54 bits per game that's a 66% savings, not insignificant!
+From 162 to 54 bits per game that's a 66% savings... 33% smaller! Not insignificant!
 ```
 
 That's less than 7 bytes... That's less than the amount of space needed to store the word "Esoteric".
@@ -295,9 +298,10 @@ Well that's just plain weird...
 That was fun.
 
 The caveat of course being that this includes all nonsense and illegal moves and doesn't use "compression", 
-the "Key Frame" version of this would be the likely one to compress, there's only 9 states to track (only 9
-bits). For storing multiple games, you'd only need to store difference between the plays. Of course using 
-actual compression to eliminate the 0's (two moves, could have up to 16 0's in a row on the second move!).
+the "Key Frame" version of this would be the likely one to use and implement compression, there's only 9 
+states to track (only 9 bits). For storing multiple games, you'd only need to store difference between 
+the plays. Of course using actual compression to eliminate the 0's (two moves, could have up to 16 0's in 
+a row on the second move!).
 
 If we wanted to have fun we could dig deeper into the 765 possible non-duplicated states. If we used the zeroth
 state in our method here we have 6 bits to play with; 2 for reflective duplication (N/S & E/W), 2 more bits for
