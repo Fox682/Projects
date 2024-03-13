@@ -180,9 +180,6 @@ turn so I can reconstruct everything.
 
 ```
 Store each Frame, like this:
-- We intuitively know who went where
-- We also know where they place the piece on the board
-- We can also determine a winner here pretty easily
 
 BoardT1 = [100000000]
 BoardT2 = [000100000]
@@ -197,27 +194,32 @@ So with this we have 9 bits per board with a maximum of 9 games.
 9 * 9 = 81 bits to store a whole game
 ```
 
-Not bad! Not only can I reconstruct the board over time I know who went and where the pieces belong!
+Not bad! Not only can I reconstruct the board over time:
+- We intuitively know who went where
+- We also know where they place the piece on the board
+- We can also determine a winner here pretty easily
+
+On top of all that there's literally only 9 states to keep track of. Friggin Genius!
 
 Well that was fun! Problem Solved, we can move on... 
 
-> *Voice my head* - "No, there's wasted space and you can do better..."
+> *The Abyss of Insanity* - "No, you can do better... less storage..."
 
-Seriously?!?! *Points to self in the mirror* look bud, we just went from 162 to 135 to 81 bits 
+Seriously?!?! *Points finger at the Abyss of Insanity* look, we just went from 162 to 135 to 81 bits 
 to store the game state AND now you have data to reconstruct the whole game from start to finish 
-and you can find out who won. I just cut the storage space in half exactly what wasted...
+and you can find out who won. I just cut the storage space in half... exactly what wasted...
 
 ### Third Innovation: Space... Spaaaaaaaaace!
 
 ... Space.... goddamnit... comedy comes in threes...
 
-> Past Me Who is a Jerk - "Store the game state in the most asinine way I can think of"
+> Past Me Who is a Jerk - "Store the game state in the most asinine way I can think of."
 
 Since we're using a sort of Temporal Reconstruction to store the bits we can, instead of storing 
 all 9 bits per "frame", store the data in an even more esoteric way. 
 
-Using X and Y... I know, I can hear the screaming, I just used time and now I'm using space to 
-solve this problem... I'm sorry.
+Using X and Y... I know, I... I can hear the screaming, I just used time and now I'm using space to 
+solve this problem... I'm sorry, stop screaming!
 
 For each X and Y, we can use a pair of 3-bit values to store the position of the change bits in each of the 9 cells in Tic-Tac-Toe when used together.
 
