@@ -270,8 +270,9 @@ Using a whopping 6 bits per frame and 9 frames for a whole game crunches this do
 
 That's less than 7 bytes... That's less than the amount of space needed to store the word "Esoteric".
 
-And because I'm a completionist (sometimes) we can store this using Base64. Each character 
-representing exactly 6 bits.
+And because I'm a completionist (Chris used Base-3, we need moar bases!) we can store this using Base64. Each character representing exactly 6 bits.
+
+[Wikipedia - Base64](https://en.wikipedia.org/wiki/Base64)
 
 ```
 Board States from above as Base64:
@@ -290,7 +291,6 @@ Of course I *just* realized there's only 63 possible states with this method..
 ```
 
 Well that's just plain weird...
-
 
 
 This solution of course is a prime example of the "Space-Time Trade-off". We'll end up with a more 
