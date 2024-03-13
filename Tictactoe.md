@@ -123,7 +123,7 @@ First, some rules. For Tic-Tac-Toe, cause those are the only ones I'm going to f
 
 If I was going to discover another solution I needed to think about this problem in a 
 different way (Outside the box!). What if we were to store just the change in the state of the game 
-rather than just the instantaneous state of the board an any time.
+rather than just the instantaneous state of the  entire board at any one time?
 
 As each player moves we simply put a 1 where a player moves. Simple! 
 
