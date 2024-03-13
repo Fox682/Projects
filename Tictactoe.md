@@ -305,8 +305,8 @@ classic version and you'd end up with:
 
 ```
 765 States * 18 bits = 13.77 Kilobits = ~1,722 KBs = ~1.68 MBs
-This doesn't include the Reflective and Rotational Duplicates however. But you could just add more bits
-to each state. Probably 5 or 6.
+This doesn't include the Reflective and Rotational Duplicates however. But you could just add
+more bits to each state. Probably 5 or 6.
 ```
 
 This solution of course is a prime example of the "Space-Time Trade-off". We'll end up with a more 
