@@ -152,7 +152,7 @@ the pieces went. I can't tell who won... Not enough information. Good job... gen
 I can do the same with Tic-Tac-Toe!
 
 I can even cheat. Check this out, we know that X goes first followed by O each time until 
-the game is played. I can use this to my advantage.
+the game is complete. I can use this to my advantage.
 
 ```
 X goes First:
@@ -272,7 +272,7 @@ Using a whopping *6 bits per frame* and 9 frames for a whole game crunches this 
 ```
 9 * 6 = 54 bits... For a whole game of Tic-Tac-Toe...
 
-From 162 to 54 bits per game that's a 66% savings... 33% smaller! Not insignificant!
+From 162 to 54 bits per game that's a 66% savings... 33% of the space! Not insignificant!
 ```
 
 That's less than 7 bytes... That's less than the amount of space needed to store the word "Esoteric".
