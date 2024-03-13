@@ -270,7 +270,7 @@ Using a whopping 6 bits per frame and 9 frames for a whole game crunches this do
 
 That's less than 7 bytes... That's less than the amount of space needed to store the word "Esoteric".
 
-And because I'm a completionist (Chris used Base-3, we need moar bases!) we can store this using Base64. Each character representing exactly 6 bits.
+And because I'm a completionist (Chris used Base-3, we need moar bases!) we can store this using Base64. Each character representing exactly 6 bits. There's lots of tools to work with Base64 so storage would be reasonably efficient.
 
 [Wikipedia - Base64](https://en.wikipedia.org/wiki/Base64)
 
@@ -292,6 +292,28 @@ Of course I *just* realized there's only 63 possible states with this method..
 
 Well that's just plain weird...
 
+### Conclusions
+
+Well that was fun.
+
+The caveat of course being that this includes all non-sense and illegal moves and doesn't use "compression", 
+the "Key Frame" version of this would be the likely one to compress, there's only 9 states to track (only 9
+bits). For storing multiple games, you'd only need to store difference between the plays. Of course using 
+actual compression to eliminate the 0's (two moves, could have up to 16 0's in a row on the second move!).
+
+If we wanted to have fun we could dig deeper into the 765 possible non-duplicated states. If we used the zeroth
+state in our method here we have 6 bits to play with 2 for reflective duplication and 2 more bits for rotational
+duplication (4 orientations only needs 2 bits N,E,S,W). Then 2 bits left for other fun.
+
+The rest will have to be an exercise to the reader, as storing all possible states is hard since it would 
+require each frame to store the instantanious state which this system doesn't do. You could however do the 18 bit 
+classic version and you'd end up with:
+
+```
+765 States * 18 bits = 13.77 Kilobits = ~1,722 KBs = ~1.68 MBs
+This doesn't include the Reflective and Rotational Duplicates however. But you could just add more bits
+to each state.
+```
 
 This solution of course is a prime example of the "Space-Time Trade-off". We'll end up with a more 
 complicated program to save even more space, but you'd be better off with using a little more space 
@@ -301,6 +323,7 @@ to keep the code simpler.
 
 Don't do what I did. This is maximum overkill. This is also the reason why meta-data IS the data. 
 I'm not actually storing the data, I'm just storing data about the data and reconstructing everything from that. 
-If you find a way to store the whole game state in less than 54-bits you're a masochist... 
+If you find a way to store the whole played game state (9 moves) in less than 54-bits 
+you're a masochist... and I want to know more.
 
 ## Good Luck!
