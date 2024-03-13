@@ -209,7 +209,9 @@ and you can find out who won. I just cut the storage space in half exactly what 
 
 ### Third Innovation: Space... Spaaaaaaaaace!
 
-... Space.... goddamnit... comedy comes in threes... maximum effort...
+... Space.... goddamnit... comedy comes in threes...
+
+> Store the game state in the most asinine way I can think of
 
 Since we're using a sort of Temporal Reconstruction to store the bits we can, instead of storing 
 all 9 bits per "frame", store the data in an even more esoteric way. 
