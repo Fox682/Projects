@@ -23,13 +23,13 @@ However, I am going to descend into madness. For this though I blame Chris (I sa
 I became obsessed with this problem the moment I heard of it and I had to find a better solution. 
 I knew intuitively there was one and I was determined to find it.
 
-This is a "clean room" idea, no other research about this was done, until I had written this down first. 
-Otherwise, whats the fun in that?
+This is a semi-"clean room" idea, no other research beyond what was listed above was done, until I had 
+written this down first. Otherwise, what's the fun in that?
 
 #### The Problem:
 How do we store a the state of a game of Tic-Tac-Toe?
 
-I took a personal spin on this. It's nice to be able to store a single state as small as possible.
+I took a different spin on this. It's nice to be able to store a single state as small as possible.
 But what if we were to store the replay of the game... as well as everything else that goes with 
 Tic-Tac-Toe?
 
