@@ -89,3 +89,9 @@ res = et - st
 print('CPU Execution time:', res, 'seconds')
 ```
 
+## Performance of the Algorithim 
+
+![Algorithim Performance Chart](
+
+
+
