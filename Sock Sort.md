@@ -90,6 +90,8 @@ print('CPU Execution time:', res, 'seconds')
 ```
 
 ## Performance of the Algorithim 
+-----------------------------
+The chart below shows the performance of the algorithim 'x' axis is time (in seconds) 'y' is the number of buckets 100,000 items were sorted into.
 
 ![Algorithim Performance Chart](https://github.com/Fox682/Projects/blob/master/AlgoPerform.png)
 
