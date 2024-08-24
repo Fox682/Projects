@@ -91,7 +91,7 @@ print('CPU Execution time:', res, 'seconds')
 
 ## Performance of the Algorithim 
 
-![Algorithim Performance Chart](
+![Algorithim Performance Chart](https://github.com/Fox682/Projects/blob/master/AlgoPerform.png)
 
 
 
