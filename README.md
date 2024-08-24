@@ -14,6 +14,8 @@
   * Requirements (full): Pihole, VPS (with wireguard & unbound), wireguard client
 * [Tic-Tac-Toe](https://github.com/Fox682/Projects/blob/master/Tictactoe.md)
   * I don't know what I was thinking...
+* [Sock Sort](https://github.com/Fox682/Projects/blob/master/Sock%20Sort.md)
+  * Socks are Fun!
 
 **Future:**  
 - TBD
